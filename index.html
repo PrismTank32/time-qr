@@ -3,8 +3,6 @@
 <head>
     <title>Time QR</title>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,7 +16,7 @@
             word-break: break-all;
         }
 
-        canvas {
+        img {
             border: 1px solid #ccc;
         }
     </style>
@@ -26,51 +24,38 @@
 
 <body>
 
-    <h1>Current Time QR</h1>
+<h1>Current Time QR</h1>
 
-    <div id="time"></div>
+<div id="time"></div>
 
-    <img id="qr" width="400">
+<img id="qr" width="400" height="400">
 
-    <script>
-        const canvas = document.getElementById('qr');
+<script>
+function updateQR() {
 
-        function updateQR() {
+    const now = new Date();
 
-            const now = new Date();
+    const timestamp =
+        now.getFullYear() + "-" +
+        String(now.getMonth() + 1).padStart(2, '0') + "-" +
+        String(now.getDate()).padStart(2, '0') + " " +
+        String(now.getHours()).padStart(2, '0') + ":" +
+        String(now.getMinutes()).padStart(2, '0') + ":" +
+        String(now.getSeconds()).padStart(2, '0');
 
-            const timestamp =
-                now.getFullYear() + "-" +
-                String(now.getMonth() + 1).padStart(2, '0') + "-" +
-                String(now.getDate()).padStart(2, '0') + " " +
-                String(now.getHours()).padStart(2, '0') + ":" +
-                String(now.getMinutes()).padStart(2, '0') + ":" +
-                String(now.getSeconds()).padStart(2, '0');
+    const command =
+        `timedatectl set-time "${timestamp}"`;
 
-            const command =
-                'timedatectl set-time "' + timestamp + '"';
+    document.getElementById("time").textContent = command;
 
-            document.getElementById('time').textContent = command;
+    document.getElementById("qr").src =
+        "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=" +
+        encodeURIComponent(command);
+}
 
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            QRCode.toCanvas(
-                canvas,
-                command,
-                {
-                    width: 400,
-                    margin: 2
-                },
-                function(error) {
-                    if (error) console.error(error);
-                }
-            );
-        }
-        setInterval(updateQR, 1000);
-        updateQR();
-
-    </script>
+updateQR();
+setInterval(updateQR, 1000);
+</script>
 
 </body>
 </html>
