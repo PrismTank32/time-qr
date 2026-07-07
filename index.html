@@ -4,9 +4,8 @@
 <head>
     <title>Time QR</title>
 
-    .cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
+    <script src="httpsdflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js
 </head>
-
 
 <body>
 
@@ -36,9 +35,6 @@
 
             document.getElementById('time').textContent = command;
 
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
             QRCode.toCanvas(
                 canvas,
                 command,
@@ -46,7 +42,7 @@
                     width: 400,
                     margin: 2
                 },
-                function(error) {
+                function (error) {
                     if (error) console.error(error);
                 }
             );
