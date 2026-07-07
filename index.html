@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Time QR</title>
+
+    /npm/qrcode/build/qrcode.min.js"></script>
+</head>
+
+<body>
+    <h1>Current Time QR</h1>
+
+    <div id="time"></div>
+
+    <canvas id="qr"></canvas>
+
+    <script>
+        function updateQR() {
+
+            const now = new Date();
+
+            const timestamp =
+                now.getFullYear() + "-" +
+                String(now.getMonth()+1).padStart(2,'0') + "-" +
+                String(now.getDate()).padStart(2,'0') + " " +
+                String(now.getHours()).padStart(2,'0') + ":" +
+                String(now.getMinutes()).padStart(2,'0') + ":" +
+                String(now.getSeconds()).padStart(2,'0');
+
+            document.getElementById('time').innerText = timestamp;
+
+            QRCode.toCanvas(
+                document.getElementById('qr'),
+                timestamp,
+                { width: 400 }
+            );
+        }
+
+        setInterval(updateQR, 1000);
+        updateQR();
+    </script>
+</body>
+</html>
+``
