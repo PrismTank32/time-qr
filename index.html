@@ -1,59 +1,44 @@
 <!DOCTYPE html>
 <html>
-
-
 <head>
     <title>Time QR</title>
-
-    <script src=".cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js
+    /ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
 </head>
-
-
 <body>
 
-    <h1>Current Time QR</h1>
+<h1>Current Time QR</h1>
 
-    <div id="time"></div>
+<div id="time"></div>
 
-    <canvas id="qr"></canvas>
+<canvas id="qr"></canvas>
 
-    <script>
-        const canvas = document.getElementById('qr');
+<script>
+const canvas = document.getElementById("qr");
 
-        function updateQR() {
+function updateQR() {
+    const now = new Date();
 
-            const now = new Date();
+    const timestamp =
+        now.getFullYear() + "-" +
+        String(now.getMonth() + 1).padStart(2, "0") + "-" +
+        String(now.getDate()).padStart(2, "0") + " " +
+        String(now.getHours()).padStart(2, "0") + ":" +
+        String(now.getMinutes()).padStart(2, "0") + ":" +
+        String(now.getSeconds()).padStart(2, "0");
 
-            const timestamp =
-                now.getFullYear() + "-" +
-                String(now.getMonth() + 1).padStart(2, '0') + "-" +
-                String(now.getDate()).padStart(2, '0') + " " +
-                String(now.getHours()).padStart(2, '0') + ":" +
-                String(now.getMinutes()).padStart(2, '0') + ":" +
-                String(now.getSeconds()).padStart(2, '0');
+    const command = `timedatectl set-time "${timestamp}"`;
 
-            const command =
-                'timedatectl set-time "' + timestamp + '"';
+    document.getElementById("time").textContent = command;
 
-            document.getElementById('time').textContent = command;
+    QRCode.toCanvas(canvas, command, {
+        width: 400,
+        margin: 2
+    });
+}
 
-            QRCode.toCanvas(
-                canvas,
-                command,
-                {
-                    width: 400,
-                    margin: 2
-                },
-                function (error) {
-                    if (error) console.error(error);
-                }
-            );
-        }
-
-        updateQR();
-        setInterval(updateQR, 1000);
-
-    </script>
+updateQR();
+setInterval(updateQR, 1000);
+</script>
 
 </body>
 </html>
